@@ -1,0 +1,95 @@
+# LoRA 融合配置文件
+# =========================================
+
+# ========== 配置说明 ==========
+# 场景1：单个LoRA合并到基础模型
+#   - lora_path_list 只包含1个LoRA路径
+#   - merge_only_lora 必须为 false
+#   - merge_method 不需要设置（自动使用单个LoRA合并）
+
+# 场景2：多个LoRA融合后合并到基础模型
+#   - lora_path_list 包含2-5个LoRA路径
+#   - merge_only_lora: false
+#   - 设置 merge_method
+
+# 场景3：仅合并多个LoRA（不合并到基础模型）
+#   - lora_path_list 包含2-5个LoRA路径
+#   - merge_only_lora: true
+#   - base_model_path 可以为空
+
+# ========== 基础设置 ==========
+
+# 基础模型路径（当 merge_only_lora 为 false 时必须填写）
+base_model_path: "/path/to/base/model"
+
+# 是否仅合并LoRA模块（不合并到基础模型）
+merge_only_lora: false
+
+# ========== LoRA设置 ==========
+
+# LoRA路径列表
+# - 1个LoRA：直接合并到基础模型
+# - 2-5个LoRA：先融合再合并（或仅合并LoRA）
+lora_path_list:
+  - "/path/to/lora1"
+  - "/path/to/lora2"
+  # - "/path/to/lora3"  # 可添加更多LoRA
+  # - "/path/to/lora4"
+  # - "/path/to/lora5"
+
+# ========== 融合算法（多个LoRA时使用）==========
+
+# 融合算法选择
+# 可选值: linear, ties, dare, slerp
+merge_method: "linear"
+
+# 融合权重（可选，不填则使用均匀权重）
+# 权重数量必须与LoRA数量一致
+# weights:
+#   - 0.5
+#   - 0.5
+
+# ========== 输出设置 ==========
+
+# 融合输出目录
+output_dir: "./merged_lora"
+
+# =========================================
+# 算法说明:
+# - linear: 线性加权平均（默认）
+# - ties: TIES-MERGE，基于符号的权重融合
+# - dare: DARE-MERGE，基于dropout的权重融合
+# - slerp: SLERP球面线性插值（适合两个LoRA）
+# =========================================
+
+# ========== 配置示例 ==========
+#
+# 【示例1：单个LoRA合并到基础模型】
+# base_model_path: "/path/to/base/model"
+# merge_only_lora: false
+# lora_path_list:
+#   - "/path/to/lora"
+# output_dir: "./merged_model"
+#
+# 【示例2：两个LoRA融合后合并到基础模型】
+# base_model_path: "/path/to/base/model"
+# merge_only_lora: false
+# lora_path_list:
+#   - "/path/to/lora1"
+#   - "/path/to/lora2"
+# merge_method: "slerp"
+# output_dir: "./merged_model"
+#
+# 【示例3：仅合并LoRA（不合并到基础模型）】
+# base_model_path: ""
+# merge_only_lora: true
+# lora_path_list:
+#   - "/path/to/lora1"
+#   - "/path/to/lora2"
+#   - "/path/to/lora3"
+# merge_method: "ties"
+# weights:
+#   - 0.4
+#   - 0.3
+#   - 0.3
+# output_dir: "./merged_lora"

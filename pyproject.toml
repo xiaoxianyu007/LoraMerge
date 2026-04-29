@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "loramerge"
+version = "0.1.0"
+dependencies = [
+    "torch>=2.0",
+    "transformers>=4.40",
+    "peft>=0.11.0",
+    "gradio>=4.0",
+    "pyyaml",
+    "accelerate",
+    "safetensors"
+]
+
+# 核心：注册 loramerge CLI 命令
+[project.scripts]
+loramerge-cli = "loramerge.cli:main"
